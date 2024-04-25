@@ -1,0 +1,2 @@
+# CmBacktrace_Adapt
+CmBacktrace是针对Cortex-M内核芯片提供程序运行异常时的堆栈回溯工具/中间件，将其移植到单片机中，可以在程序异常时打印相应的故障信息包括函数调用链、变量值、寄存器值等。此项目为32mcu对cmbacktrace的移植适配Demo
