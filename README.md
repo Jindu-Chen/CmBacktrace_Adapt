@@ -5,30 +5,37 @@
 CmBacktrace是针对Cortex-M内核芯片提供程序运行异常时的堆栈回溯工具/中间件，将其移植到单片机中，可以在程序异常时打印相应的故障信息包括函数调用链、变量值、寄存器值等。
 
 此项目为32mcu对cmbacktrace的移植适配Demo
+<br>
 
 ## 移植说明
 
 ### 源码工程添加
 
 工程源码见`//cm_backtrace/`，本文以国民技术芯片之gcc开发环境为例，其它环境参考修改即可
+<br>
 
 添加头文件搜索路径：
 `cm_backtrace/`
+<br>
 
 添加编译C源文件：
 ```
 cm_backtrace/cm_backtrace.c
 cm_backtrace/fault_test.c
 ```
+<br>
+
 
 添加汇编文件：
 `cm_backtrace/fault_handler/gcc/cmb_fault.S`
+<br>
 
 
 ### 工程适配
 
 注释掉原有工程的`HardFault_Handler`函数，避免与`cm_backtrace/fault_handler/`内的`HardFault_Handler`函数冲突
 
+#### 编译环境适配
 
 添加宏定义，查看`cm_backtrace/cmb_def.h`文件，如下，其提供了对各编译器的支持，主要是获取不同编译环境下的 堆栈起始结束地址、代码段起始结束地址
 ```c
@@ -114,6 +121,8 @@ xxx
   } >RAM
 ```
 
+#### 重定义标准输出至串口
+
 **适配串口打印输出：**重定向printf函数
 
 GCC环境重写`_write`函数，将数据通过串口发送出去。
@@ -125,11 +134,11 @@ int _write(int fd, char* data, int len)
 }
 ```
 
-**添加初始化调用：**
+#### 添加初始化调用
 
 在执行初始化的用户文件内，添加头文件包含`#include "cm_backtrace.h"`，此处以`main.c`之`main`函数为例：
 
-```
+```c
 #include "cm_backtrace.h"
 #define HARDWARE_VERSION               "V1.0.0"
 #define SOFTWARE_VERSION               "V0.1.0"
@@ -139,7 +148,8 @@ extern void fault_test_by_div0(void);
 
 int main(void)
 {
-    xxx
+    // 用户的硬件初始化
+    
     cm_backtrace_init("CmBacktrace", "", SOFTWARE_VERSION);
 
     // 调用如下函数，则为测试实际的Demo报错效果
