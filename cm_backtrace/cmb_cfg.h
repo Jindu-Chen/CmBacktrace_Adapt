@@ -29,7 +29,7 @@
 #ifndef _CMB_CFG_H_
 #define _CMB_CFG_H_
 
-#include "log.h"
+
 
 /* print line, must config by user */
 #define cmb_println(...)  printf(__VA_ARGS__);printf("\r\n") /* e.g., printf(__VA_ARGS__);printf("\r\n")  or  SEGGER_RTT_printf(0, __VA_ARGS__);SEGGER_RTT_WriteString(0, "\r\n")  */
